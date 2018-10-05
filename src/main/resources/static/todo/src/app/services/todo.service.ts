@@ -17,16 +17,18 @@ export class TodoService {
     private options = new RequestOptions({headers:this.headers});
     constructor(private _http:HttpClient) { }
 
-	private completedTasksItems : any = null;
+	  private completedTasksItems : any = null;
     private _completedItem: BehaviorSubject<any> = new BehaviorSubject<any>(this.completedTasksItems);
   	public readonly completedItem: Observable<any> = this._completedItem.asObservable();
 
-	private pendingTasksItems : any = null;
+	  private pendingTasksItems : any = null;
     private _pendingItem: BehaviorSubject<any> = new BehaviorSubject<any>(this.pendingTasksItems);
   	public readonly pendingItem: Observable<any> = this._pendingItem.asObservable();
 
     getItems(){
-      return this._http.get(this.baseUrl+'/').map((response:Response)=>response.json())
+      return this._http.get(this.baseUrl+'/').map((response:Response)=>{
+		      this.pendingTasksItems = response.json();
+	    })
       .catch(this.errorHandler);
     }
 
@@ -36,7 +38,13 @@ export class TodoService {
     }
 
     getItemsByType(type:boolean){
-    return this._http.get(this.baseUrl+'/type/'+type).map((response:Response)=>response.json())
+    return this._http.get(this.baseUrl+'/type/'+type).map((response:Response)=>{
+		if(type){
+			this.completedTasksItems = response.json();
+		} else {
+			this.pendingTasksItems = response.json();
+		}
+	  })
       .catch(this.errorHandler);
     }
 
@@ -45,13 +53,19 @@ export class TodoService {
       .catch(this.errorHandler);
     }
 
-    addTodo(item:Item){
-      return this._http.post(this.baseUrl+'/',JSON.stringify(item)).map((response:Response)=>response.json())
+    addItem(item:Item){
+      return this._http.post(this.baseUrl+'/',JSON.stringify(item)).map((response:Response)=>{
+		  console.log("add item to pending: "+response.json());
+		  this._pendingItem.next(response.json());
+	  })
       .catch(this.errorHandler);
     }
 
     updateItem(item:Item,id:Number){
-      return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item)).map((response:Response)=>response.json())
+      return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item)).map((response:Response)=>{
+        console.log("update item to complete: "+response.json());
+        this._completedItem.next(response.json());
+      })
       .catch(this.errorHandler);
     }
 

@@ -12,7 +12,7 @@
                 <td><input type="radio" onclick="markItemComplete(this)"/></td>
                 <td>{{item.title}}</td>
                 <td>{{item.description}}</td>
-                <td><button class="btn btn-primary" (click)="updateItem(item)">Edit</button></td>
+                <td><button class="btn btn-danger" (click)="deleteItem(item)">Delete</button></td>
             </tr>
         </tbody>
     </table>
