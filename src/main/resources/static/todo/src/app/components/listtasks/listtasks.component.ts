@@ -15,17 +15,16 @@ export class ListtasksComponent implements OnInit {
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
+    this._itemService.getItemsByType(false);
     this._itemService.pendingItemsUpdater.subscribe((data)=>{
-      if(null == data){
-        data = [{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}];
-      }
-    this.pendingItems=data;
-  });
+      this.pendingItems=data;
+    });
   }
 
     deleteItem(item){
       console.log('deleteItem==>'+item.id);
-      this._itemService.deleteItemById(item.id);
+      this._itemService.deleteItemById(item.id, false);
+      this._itemService.getItemsByType(false);
     }
 
     markItemComplete(item){

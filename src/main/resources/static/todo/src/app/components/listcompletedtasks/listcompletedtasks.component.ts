@@ -13,17 +13,15 @@ export class ListcompletedtasksComponent implements OnInit {
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
+    this._itemService.getItemsByType(true);
     this._itemService.completedItemsUpdater.subscribe((data)=>{
-      if(null == data){
-        data = [{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}];
-      }
-    this.completedItems=data;
+      this.completedItems=data;
     });
   }
 
   deleteItem(item){
     console.log('deleteItem==>'+item.id);
-    this._itemService.deleteItemById(item.id);
+    this._itemService.deleteItemById(item.id, true);
   }
 
 

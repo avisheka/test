@@ -13,6 +13,6 @@ export class AppComponent {
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
-    this._itemService.getItems();
+    
   }
 }

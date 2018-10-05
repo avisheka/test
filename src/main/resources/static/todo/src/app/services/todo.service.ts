@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Observable, ReplaySubject} from 'rxjs';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
 import { Item } from '../model/Item';
 
 @Injectable({
@@ -13,8 +9,11 @@ import { Item } from '../model/Item';
 })
 export class TodoService {
     private baseUrl:string='http://localhost:8080/api/items';
-    private headers = new Headers({'Content-Type':'application/json'});
-    private options = new RequestOptions({headers:this.headers});
+    const httpOptions = {
+     headers: new HttpHeaders({
+     'Content-Type':  'application/json'
+    })
+};
     constructor(private _http:HttpClient) { }
 
 	  private completedTasksItems: Item[] = [];
@@ -26,52 +25,54 @@ export class TodoService {
   	public readonly pendingItemsUpdater: Observable<Item[]> = this._pendingItemsEmitter.asObservable();
 
     getItems(){
-      this._http.get(this.baseUrl+'/').map((response:Response)=>{
-		      this.pendingTasksItems = JSON.parse(JSON.stringify(response.json()));
+      this._http.get(this.baseUrl+'/').subscribe((response:Response)=>{
+		      this.pendingTasksItems = JSON.parse(JSON.stringify(response));
           this._pendingItemsEmitter.next(this.pendingTasksItems);
-          return this.pendingTasksItems;
 	    })
-      .catch(this.errorHandler);
     }
 
     getItemById(id:Number){
-    return this._http.get(this.baseUrl+'/id/'+id).map((response:Response)=>response.json())
-      .catch(this.errorHandler);
+      return this._http.get(this.baseUrl+'/id/'+id).subscribe((response:Response)=>response);
     }
 
     getItemsByType(type:boolean){
-    return this._http.get(this.baseUrl+'/type/'+type).map((response:Response)=>{
-		if(type){
-			this.completedTasksItems = JSON.parse(JSON.stringify(response.json()));
-		} else {
-			this.pendingTasksItems = JSON.parse(JSON.stringify(response.json()));
-		}
-	  })
-      .catch(this.errorHandler);
+      return this._http.get(this.baseUrl+'/type/'+type).subscribe((response:Response)=>{
+    		if(type){
+    			this.completedTasksItems = JSON.parse(JSON.stringify(response));
+          this._completedItemsEmitter.next(this.completedTasksItems);
+    		} else {
+    			this.pendingTasksItems = JSON.parse(JSON.stringify(response));
+          this._pendingItemsEmitter.next(this.pendingTasksItems);
+    		}
+      });
     }
 
-    deleteItemById(id:Number){
-      return this._http.delete(this.baseUrl+'/id/'+id).map((response:Response)=>response.json())
-      .catch(this.errorHandler);
+    deleteItemById(id:Number, type: boolean){
+      return this._http.delete(this.baseUrl+'/id/'+id).subscribe((response:Response)=>{
+        if(type){
+    			this.completedTasksItems = JSON.parse(JSON.stringify(response));
+          this._completedItemsEmitter.next(this.completedTasksItems);
+    		} else {
+    			this.pendingTasksItems = JSON.parse(JSON.stringify(response));
+          this._pendingItemsEmitter.next(this.pendingTasksItems);
+    		}
+      });
     }
 
     addItem(item:Item){
-      return this._http.post(this.baseUrl+'/',JSON.stringify(item)).map((response:Response)=>{
-		  console.log("add item to pending: "+response.json());
-		  this._pendingItemsEmitter.next(response.json());
-	  })
-      .catch(this.errorHandler);
+      return this._http.post(this.baseUrl+'/',JSON.stringify(item),this.httpOptions).subscribe((response:Response)=>{
+  		  console.log("add item to pending: "+response);
+  		  this._pendingItemsEmitter.next(response);
+	    });
     }
 
     updateItem(item:Item,id:Number){
-      return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item)).map((response:Response)=>{
-        console.log("update item to complete: "+response.json());
-        this._completedItemsEmitter.next(response.json());
-      })
-      .catch(this.errorHandler);
+      return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item),this.httpOptions).subscribe((response:Response)=>{
+        //console.log("update item to complete: "+response);
+        //this.completedTasksItems = JSON.parse(JSON.stringify(response));
+        //this._completedItemsEmitter.next(this.completedTasksItems);
+        this._itemService.getItemsByType(false);
+      });
     }
 
-    errorHandler(error:Response){
-      return Observable.throw(error||"SERVER ERROR");
-    }
 }
