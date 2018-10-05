@@ -8,7 +8,7 @@ import { TodoService } from './services/todo.service';
   providers: [TodoService]
 })
 export class AppComponent {
-  title = 'todo';
+  title = 'Avishek\'s Todo App';
 
   constructor(private _itemService: TodoService) { }
 

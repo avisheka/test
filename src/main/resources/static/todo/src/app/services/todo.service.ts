@@ -26,10 +26,10 @@ export class TodoService {
   	public readonly pendingItemsUpdater: Observable<Item[]> = this._pendingItemsEmitter.asObservable();
 
     getItems(){
-      return this._http.get(this.baseUrl+'/').map((response:Response)=>{
+      this._http.get(this.baseUrl+'/').map((response:Response)=>{
 		      this.pendingTasksItems = JSON.parse(JSON.stringify(response.json()));
           this._pendingItemsEmitter.next(this.pendingTasksItems);
-          //return this.pendingTasksItems;
+          return this.pendingTasksItems;
 	    })
       .catch(this.errorHandler);
     }
