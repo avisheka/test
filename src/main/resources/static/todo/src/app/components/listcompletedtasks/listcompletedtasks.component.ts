@@ -13,7 +13,7 @@ export class ListcompletedtasksComponent implements OnInit {
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
-    this._itemService.completedItem.subscribe((data)=>{
+    this._itemService.completedItemsUpdater.subscribe((data)=>{
       if(null == data){
         data = [{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}];
       }

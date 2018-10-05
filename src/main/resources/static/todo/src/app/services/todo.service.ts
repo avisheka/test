@@ -18,17 +18,18 @@ export class TodoService {
     constructor(private _http:HttpClient) { }
 
 	  private completedTasksItems: Item[] = [];
-    private _completedItem: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(this.completedTasksItems);
-  	public readonly completedItem: Observable<Item[]> = this._completedItem.asObservable();
+    private _completedItemsEmitter: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(this.completedTasksItems);
+  	public readonly completedItemsUpdater: Observable<Item[]> = this._completedItemsEmitter.asObservable();
 
 	  private pendingTasksItems: Item[] = [];
-    private _pendingItem: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(this.pendingTasksItems);
-  	public readonly pendingItem: Observable<Item[]> = this._pendingItem.asObservable();
+    private _pendingItemsEmitter: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(this.pendingTasksItems);
+  	public readonly pendingItemsUpdater: Observable<Item[]> = this._pendingItemsEmitter.asObservable();
 
     getItems(){
-      this._http.get(this.baseUrl+'/').map((response:Response)=>{
+      return this._http.get(this.baseUrl+'/').map((response:Response)=>{
 		      this.pendingTasksItems = JSON.parse(JSON.stringify(response.json()));
-          return this.pendingTasksItems;
+          this._pendingItemsEmitter.next(this.pendingTasksItems);
+          //return this.pendingTasksItems;
 	    })
       .catch(this.errorHandler);
     }
@@ -57,7 +58,7 @@ export class TodoService {
     addItem(item:Item){
       return this._http.post(this.baseUrl+'/',JSON.stringify(item)).map((response:Response)=>{
 		  console.log("add item to pending: "+response.json());
-		  this._pendingItem.next(response.json());
+		  this._pendingItemsEmitter.next(response.json());
 	  })
       .catch(this.errorHandler);
     }
@@ -65,7 +66,7 @@ export class TodoService {
     updateItem(item:Item,id:Number){
       return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item)).map((response:Response)=>{
         console.log("update item to complete: "+response.json());
-        this._completedItem.next(response.json());
+        this._completedItemsEmitter.next(response.json());
       })
       .catch(this.errorHandler);
     }
