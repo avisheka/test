@@ -9,15 +9,15 @@ import { Item } from '../../model/Item';
   providers: [TodoService]
 })
 export class ListcompletedtasksComponent implements OnInit {
-  private completedItems: any;
+  private completedItems: Item[] = [];
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
     this._itemService.completedItem.subscribe((data)=>{
       if(null == data){
-        data = '[{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}]';
+        data = [{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}];
       }
-    this.completedItems=JSON.stringify(data);
+    this.completedItems=data;
     });
   }
 

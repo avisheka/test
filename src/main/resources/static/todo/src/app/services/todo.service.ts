@@ -17,17 +17,18 @@ export class TodoService {
     private options = new RequestOptions({headers:this.headers});
     constructor(private _http:HttpClient) { }
 
-	  private completedTasksItems : any = null;
-    private _completedItem: BehaviorSubject<any> = new BehaviorSubject<any>(this.completedTasksItems);
-  	public readonly completedItem: Observable<any> = this._completedItem.asObservable();
+	  private completedTasksItems: Item[] = [];
+    private _completedItem: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(this.completedTasksItems);
+  	public readonly completedItem: Observable<Item[]> = this._completedItem.asObservable();
 
-	  private pendingTasksItems : any = null;
-    private _pendingItem: BehaviorSubject<any> = new BehaviorSubject<any>(this.pendingTasksItems);
-  	public readonly pendingItem: Observable<any> = this._pendingItem.asObservable();
+	  private pendingTasksItems: Item[] = [];
+    private _pendingItem: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(this.pendingTasksItems);
+  	public readonly pendingItem: Observable<Item[]> = this._pendingItem.asObservable();
 
     getItems(){
-      return this._http.get(this.baseUrl+'/').map((response:Response)=>{
-		      this.pendingTasksItems = response.json();
+      this._http.get(this.baseUrl+'/').map((response:Response)=>{
+		      this.pendingTasksItems = JSON.parse(JSON.stringify(response.json()));
+          return this.pendingTasksItems;
 	    })
       .catch(this.errorHandler);
     }
@@ -40,9 +41,9 @@ export class TodoService {
     getItemsByType(type:boolean){
     return this._http.get(this.baseUrl+'/type/'+type).map((response:Response)=>{
 		if(type){
-			this.completedTasksItems = response.json();
+			this.completedTasksItems = JSON.parse(JSON.stringify(response.json()));
 		} else {
-			this.pendingTasksItems = response.json();
+			this.pendingTasksItems = JSON.parse(JSON.stringify(response.json()));
 		}
 	  })
       .catch(this.errorHandler);

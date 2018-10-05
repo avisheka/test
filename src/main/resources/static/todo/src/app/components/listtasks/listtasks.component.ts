@@ -10,17 +10,16 @@ import {Subscription} from 'rxjs/Subscription';
   providers: [TodoService]
 })
 export class ListtasksComponent implements OnInit {
-  private pendingItems:any;
-  private subscriptions: Subscription[] = [];
+  private pendingItems: Item[] = [];
 
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
     this._itemService.pendingItem.subscribe((data)=>{
       if(null == data){
-        data = '[{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}]';
+        data = [{"id":4,"title":"veggies","description":"get veggies","pending":false},{"id":5,"title":"laundry","description":"laundry","pending":false}];
       }
-    this.pendingItems=JSON.stringify(data);
+    this.pendingItems=data;
     });
   }
 
