@@ -5,17 +5,15 @@ import { Item } from '../../model/Item';
 @Component({
   selector: 'app-listtasks',
   templateUrl: './listtasks.component.html',
-  styleUrls: ['./listtasks.component.css']
+  styleUrls: ['./listtasks.component.css'],
+  providers: [TodoService]
 })
 export class ListtasksComponent implements OnInit {
   private pendingItems:any;
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
-    this.pendingItems=this._itemService.getItemsByType(false);
-    /*.subscribe((pendingItems)=>{
-      pendingItems;
-    });*/
+    //this.pendingItems=this._itemService.getItemsByType(false);
   }
 
 

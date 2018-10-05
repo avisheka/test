@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoService } from '../services/todo.service';
-import { Item } from '../model/Item';
+import { TodoService } from '../../services/todo.service';
+import { Item } from '../../model/Item';
 
 @Component({
   selector: 'app-createtask',
@@ -9,10 +9,9 @@ import { Item } from '../model/Item';
   providers: [TodoService]
 })
 export class CreatetaskComponent implements OnInit {
-
-	newItem: Item = new Item();
+  newItem: Item = new Item();
 	
-  constructor(private todoService: TodoServices) { }
+  constructor(private todoService: TodoService) { }
 
   ngOnInit() {
   }

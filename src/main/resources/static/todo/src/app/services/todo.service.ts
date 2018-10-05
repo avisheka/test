@@ -45,7 +45,7 @@ export class TodoService {
       .catch(this.errorHandler);
     }
 
-    createItem(item:Item){
+    addTodo(item:Item){
       return this._http.post(this.baseUrl+'/',JSON.stringify(item)).map((response:Response)=>response.json())
       .catch(this.errorHandler);
     }
