@@ -1,0 +1,19 @@
+<h1>List Of Tasks</h1>
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <th></th>
+            <th>Title</th>
+            <th>Description</th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of pendingItems">
+                <td><input type="radio" onclick="markItemComplete(this)"/></td>
+                <td>{{item.title}}</td>
+                <td>{{item.description}}</td>
+                <td><button class="btn btn-primary" (click)="updateItem(item)">Edit</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
