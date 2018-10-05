@@ -40,7 +40,7 @@ export class TodoService {
       .catch(this.errorHandler);
     }
 
-    deleteItem(id:Number){
+    deleteItemById(id:Number){
       return this._http.delete(this.baseUrl+'/id/'+id).map((response:Response)=>response.json())
       .catch(this.errorHandler);
     }

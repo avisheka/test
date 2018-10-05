@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { TodoService } from '../services/todo.service';
+import { Item } from '../model/Item';
 
 @Component({
   selector: 'app-createtask',
   templateUrl: './createtask.component.html',
-  styleUrls: ['./createtask.component.css']
+  styleUrls: ['./createtask.component.css'],
+  providers: [TodoService]
 })
 export class CreatetaskComponent implements OnInit {
 
-  constructor() { }
+	newItem: Item = new Item();
+	
+  constructor(private todoService: TodoServices) { }
 
   ngOnInit() {
   }
 
-    newItem(){
-      console.log('newItem');
-      //createItem
-    }
+    addTodo() {
+		this.todoService.addTodo(this.newItem);
+		this.newItem = new Item();
+	}
 }

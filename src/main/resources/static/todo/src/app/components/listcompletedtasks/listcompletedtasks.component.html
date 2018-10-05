@@ -1,4 +1,4 @@
-<h1>Completed Tasks</h1>
+<h1>Completed Items</h1>
 <div class="container">
     <table class="table table-striped">
         <thead>
@@ -10,7 +10,7 @@
         <tbody>
             <tr *ngFor="let item of completedItems">
                 <td><input type="radio" checked/></td>
-            	  <td>{{item.title}}</td>
+            	<td>{{item.title}}</td>
                 <td>{{item.description}}</td>
                 <td><button class="btn btn-danger" (click)="deleteItem(item)">Delete</button></td>
             </tr>

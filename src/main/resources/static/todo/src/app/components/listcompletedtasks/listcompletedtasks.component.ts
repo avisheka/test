@@ -20,6 +20,7 @@ export class ListcompletedtasksComponent implements OnInit {
 
   deleteItem(item){
     console.log('deleteItem'+item);
+      this.todoService.deleteItemById(item.id);
   }
 
   updateItem(item){
