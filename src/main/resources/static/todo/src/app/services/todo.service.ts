@@ -68,7 +68,8 @@ export class TodoService {
 
     updateItem(item:Item,id:Number){
       return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item),this.httpOptions).subscribe((response:Response)=>{
-        this.getItemsByType(true);
+        this.getItemsByType(false);
+        this.getItemsByType(true);        
       });
     }
 

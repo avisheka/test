@@ -29,6 +29,7 @@ export class ListtasksComponent implements OnInit {
 
     markItemComplete(item){
       console.log('updateItem==>'+item);
+      item.pending = true;
       this._itemService.updateItem(item,item.id);
     }
 

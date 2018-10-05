@@ -10,14 +10,12 @@ import { Item } from '../../model/Item';
 })
 export class CreatetaskComponent implements OnInit {
   constructor(private todoService: TodoService) { }
+  private newItem: Item = new Item();
 
   ngOnInit() {
   }
 
-    addTodo(item) {
-      let newItem: Item = new Item();
-      newItem.id = item.id;
-      newItem.description = item.description;
-  	  this.todoService.addItem(newItem);
+    addTodo() {
+  	  this.todoService.addItem(this.newItem);
 	}
 }
