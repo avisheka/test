@@ -9,11 +9,11 @@ import { Item } from '../model/Item';
 })
 export class TodoService {
     private baseUrl:string='http://localhost:8080/api/items';
-    const httpOptions = {
+    private httpOptions = {
      headers: new HttpHeaders({
-     'Content-Type':  'application/json'
-    })
-};
+       'Content-Type':  'application/json'
+     })
+    };
     constructor(private _http:HttpClient) { }
 
 	  private completedTasksItems: Item[] = [];
@@ -61,17 +61,14 @@ export class TodoService {
 
     addItem(item:Item){
       return this._http.post(this.baseUrl+'/',JSON.stringify(item),this.httpOptions).subscribe((response:Response)=>{
-  		  console.log("add item to pending: "+response);
-  		  this._pendingItemsEmitter.next(response);
+  		  //console.log("add item to pending: "+response);
+  		  //this._pendingItemsEmitter.next(response);
 	    });
     }
 
     updateItem(item:Item,id:Number){
       return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item),this.httpOptions).subscribe((response:Response)=>{
-        //console.log("update item to complete: "+response);
-        //this.completedTasksItems = JSON.parse(JSON.stringify(response));
-        //this._completedItemsEmitter.next(this.completedTasksItems);
-        this._itemService.getItemsByType(false);
+        this.getItemsByType(true);
       });
     }
 
