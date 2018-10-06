@@ -10,12 +10,16 @@ import { Item } from '../../model/Item';
 })
 export class ListcompletedtasksComponent implements OnInit {
   private completedItems: Item[] = [];
+  private completedItemsTemp: Item[] = [];
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {
     this._itemService.getItemsByType(true);
     this._itemService.completedItemsUpdater.subscribe((data)=>{
-      this.completedItems=data;
+      if(null != data){
+        this.completedItems=data;
+        this.completedItemsTemp=data;
+      }
     });
   }
 

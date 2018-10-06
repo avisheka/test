@@ -48,15 +48,26 @@ export class TodoService {
     }
 
     deleteItemById(id:Number, type: boolean){
-      return this._http.delete(this.baseUrl+'/id/'+id).subscribe((response:Response)=>{
-        if(type){
-    			this.completedTasksItems = JSON.parse(JSON.stringify(response));
-          this._completedItemsEmitter.next(this.completedTasksItems);
-    		} else {
-    			this.pendingTasksItems = JSON.parse(JSON.stringify(response));
-          this._pendingItemsEmitter.next(this.pendingTasksItems);
-    		}
-      });
+      return this._http.delete(this.baseUrl+'/id/'+id).subscribe(
+        (response:Response)=>{
+          if(type){
+      			this.completedTasksItems = JSON.parse(JSON.stringify(response));
+            this._completedItemsEmitter.next(this.completedTasksItems);
+      		} else {
+      			this.pendingTasksItems = JSON.parse(JSON.stringify(response));
+            this._pendingItemsEmitter.next(this.pendingTasksItems);
+      		}
+        },
+        (error:Error)=>{
+          if(type){
+            this.completedTasksItems = [];
+            this._completedItemsEmitter.next(this.completedTasksItems);
+          } else {
+            this.pendingTasksItems = [];
+            this._pendingItemsEmitter.next(this.pendingTasksItems);
+          }
+        },
+    );
     }
 
     addItem(item:Item){
@@ -69,7 +80,7 @@ export class TodoService {
     updateItem(item:Item,id:Number){
       return this._http.put(this.baseUrl+'/id/'+id,JSON.stringify(item),this.httpOptions).subscribe((response:Response)=>{
         this.getItemsByType(false);
-        this.getItemsByType(true);        
+        this.getItemsByType(true);
       });
     }
 
