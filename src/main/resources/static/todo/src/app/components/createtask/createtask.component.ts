@@ -12,10 +12,9 @@ export class CreatetaskComponent implements OnInit {
   constructor(private todoService: TodoService) { }
   private newItem: Item = new Item();
 
-  ngOnInit() {
-  }
+  ngOnInit() {  }
 
-    addTodo() {
-  	  this.todoService.addItem(this.newItem);
+    addTodo(newItem) {
+  	  	this.todoService.addItem(newItem);
 	}
 }

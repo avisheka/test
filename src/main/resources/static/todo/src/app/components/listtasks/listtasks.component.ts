@@ -11,7 +11,6 @@ import {Subscription} from 'rxjs/Subscription';
 })
 export class ListtasksComponent implements OnInit {
   private pendingItems: Item[] = [];
-
   constructor(private _itemService: TodoService) { }
 
   ngOnInit() {

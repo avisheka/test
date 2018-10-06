@@ -9,10 +9,7 @@ import { TodoService } from './services/todo.service';
 })
 export class AppComponent {
   title = 'Avishek\'s Todo App';
-
   constructor(private _itemService: TodoService) { }
 
-  ngOnInit() {
-    
-  }
+  ngOnInit() {  }
 }

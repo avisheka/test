@@ -17,6 +17,7 @@ import { CreatetaskComponent } from './components/createtask/createtask.componen
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     HttpClientModule
   ],
   providers: [TodoService],
